@@ -32,12 +32,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Pollen\\Filesystem\\": "src"
+      "Pollen\\Config\\": "src"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Pollen\\Filesystem\\Test\\": "tests"
+      "Pollen\\Config\\Test\\": "tests"
     }
   },
   "suggest": {
