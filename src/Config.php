@@ -35,9 +35,10 @@ class Config implements ConfigInterface
      * @param string $dir
      * @param Container|null $container
      */
-    public function __construct(string $dir, ?Container $container= null)
+    public function __construct(string $dir, ?Container $container = null)
     {
         $this->dir = fs::normalizePath($dir);
+
         if ($container !== null) {
             $this->setContainer($container);
         }
@@ -67,11 +68,11 @@ class Config implements ConfigInterface
      */
     public function boot(): void
     {
-        if ($this->isBooted()) {
+        if (!$this->isBooted()) {
             if (is_dir($this->dir)) {
-                $autoload =  $this->dir . fs::DS . 'autoload.php';
+                $autoload = $this->dir . fs::DS . 'autoload.php';
                 if (file_exists($autoload)) {
-                    $loads = file_get_contents($autoload);
+                    $loads = include $autoload;
                     $classLoader = new ClassLoader();
 
                     foreach ($loads as $type => $namespaces) {
@@ -87,10 +88,9 @@ class Config implements ConfigInterface
                     if ($key === 'autoload') {
                         continue;
                     }
-                    $params[$key] = file_get_contents($filename);
+                    $params[$key] = include $filename;
                 }
-                $this->set($params);
-                $this->parse();
+                $this->set(array_merge($this->defaults(), $params));
             }
 
             $this->setBooted();
@@ -103,7 +103,8 @@ class Config implements ConfigInterface
     public function defaults(): array
     {
         return [
-            'app_url' => Env::get('APP_URL')
+            'app_url'  => Env::get('APP_URL'),
+            'timezone' => Env::get('APP_TIMEZONE'),
         ];
     }
 }
