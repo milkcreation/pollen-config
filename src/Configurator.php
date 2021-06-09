@@ -13,7 +13,7 @@ use Pollen\Support\ClassLoader;
 use Pollen\Support\Env;
 use Pollen\Support\Filesystem as fs;
 
-class Config implements ConfigInterface
+class Configurator implements ConfiguratorInterface
 {
     use BootableTrait;
     use ContainerProxy;
@@ -55,7 +55,7 @@ class Config implements ConfigInterface
      *
      * @return static
      */
-    public static function getInstance(): ConfigInterface
+    public static function getInstance(): ConfiguratorInterface
     {
         if (self::$instance instanceof self) {
             return self::$instance;
