@@ -8,7 +8,7 @@ use Pollen\Support\Concerns\BootableTraitInterface;
 use Pollen\Support\Concerns\ParamsBagDelegateTraitInterface;
 use Pollen\Support\Proxy\ContainerProxyInterface;
 
-interface ConfigInterface extends BootableTraitInterface, ContainerProxyInterface, ParamsBagDelegateTraitInterface
+interface ConfiguratorInterface extends BootableTraitInterface, ContainerProxyInterface, ParamsBagDelegateTraitInterface
 {
     /**
      * Chargement.
