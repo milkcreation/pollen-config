@@ -7,7 +7,7 @@
     "component",
     "config"
   ],
-  "time": "2021-06-09",
+  "time": "2021-06-14",
   "license": "MIT",
   "authors": [
     {
@@ -25,7 +25,9 @@
   "require": {
     "php": ">=7.4",
     "composer/installers": "~1.0",
-    "pollen-solutions/support": "^1.0"
+    "league/config": "^1.0",
+    "pollen-solutions/support": "^1.0",
+    "symfony/yaml": "^5.2"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0"

@@ -4,50 +4,54 @@ declare(strict_types=1);
 
 namespace Pollen\Config;
 
-use Pollen\Support\Concerns\BootableTrait;
-use Pollen\Support\Concerns\ParamsBagDelegateTrait;
+use Dflydev\DotAccessData\Data;
+use League\Config\Configuration;
+use Nette\Schema\Schema;
 use Pollen\Support\Exception\ManagerRuntimeException;
-use Pollen\Support\Proxy\ContainerProxy;
-use Psr\Container\ContainerInterface as Container;
-use Pollen\Support\ClassLoader;
-use Pollen\Support\Env;
-use Pollen\Support\Filesystem as fs;
 
 class Configurator implements ConfiguratorInterface
 {
-    use BootableTrait;
-    use ContainerProxy;
-    use ParamsBagDelegateTrait;
-
     /**
-     * Instance principale.
      * @var static|null
      */
     private static $instance;
 
     /**
-     * Chemin absolu vers le repertoire de stockage des fichiers de configuration.
-     * @var string
+     * @var Data
      */
-    protected $dir;
+    protected $config;
 
     /**
-     * @param string $dir
-     * @param Container|null $container
+     * @var Configuration
      */
-    public function __construct(string $dir, ?Container $container = null)
+    protected $strictConfig;
+
+    /**
+     * @var string[]
+     */
+    protected $strictConfigKeys = [];
+
+    /**
+     * @param array $config
+     */
+    public function __construct(array $config = [])
     {
-        $this->dir = fs::normalizePath($dir);
+        $this->config = new Data();
+        $this->config->import($config, Data::REPLACE);
 
-        if ($container !== null) {
-            $this->setContainer($container);
-        }
-
-        $this->boot();
+        $this->strictConfig = new Configuration();
 
         if (!self::$instance instanceof static) {
             self::$instance = $this;
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function fetchFromLoader(ConfigLoaderInterface $loader): array
+    {
+        return $loader->load();
     }
 
     /**
@@ -64,47 +68,61 @@ class Configurator implements ConfiguratorInterface
     }
 
     /**
-     * @inheritDoc
+     * @param string $key
+     * @param Schema $schema
+     *
+     * @return ConfiguratorInterface
      */
-    public function boot(): void
+    public function addSchema(string $key, Schema $schema): ConfiguratorInterface
     {
-        if (!$this->isBooted()) {
-            if (is_dir($this->dir)) {
-                $autoload = $this->dir . fs::DS . 'autoload.php';
-                if (file_exists($autoload)) {
-                    $loads = include $autoload;
-                    $classLoader = new ClassLoader();
-
-                    foreach ($loads as $type => $namespaces) {
-                        foreach ($namespaces as $namespace => $path) {
-                            $classLoader->load($namespace, $path, $type);
-                        }
-                    }
-                }
-
-                $params = [];
-                foreach (glob($this->dir . fs::DS . '*.php') as $filename) {
-                    $key = basename($filename, ".php");
-                    if ($key === 'autoload') {
-                        continue;
-                    }
-                    $params[$key] = include $filename;
-                }
-                $this->set(array_merge($this->defaults(), $params));
-            }
-
-            $this->setBooted();
+        if (!in_array($key, $this->strictConfigKeys, true)) {
+            $this->strictConfigKeys[] = $key;
         }
+
+        $this->strictConfig->addSchema($key, $schema);
+
+        if ($this->config->has($key)) {
+            $this->strictConfig->set($key, $this->config->get($key));
+            $this->config->remove($key);
+        }
+
+        return $this;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function defaults(): array
+    public function set($key, $value = null): ConfiguratorInterface
     {
-        return [
-            'app_url'  => Env::get('APP_URL'),
-            'timezone' => Env::get('APP_TIMEZONE'),
-        ];
+        if (is_string($key)) {
+            $key = [$key => $value];
+        }
+
+        if (is_array($key)) {
+            foreach ($key as $k => $v) {
+                if (in_array($k, $this->strictConfigKeys, true)) {
+                    $this->strictConfig->set($k, $v);
+                } else {
+                    $this->config->set($k, $v);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    public function get(string $key, $default = null)
+    {
+        if ($this->strictConfig->exists($key)) {
+            return $this->strictConfig->get($key);
+        }
+
+        return $this->config->get($key, $default);
+    }
+
+    public function has(string $key): bool
+    {
+        // @todo extraire la partie avant le .
+        if (in_array($key, $this->strictConfigKeys, true)) {
+            return $this->strictConfig->exists($key);
+        }
+        return $this->config->has($key);
     }
 }
