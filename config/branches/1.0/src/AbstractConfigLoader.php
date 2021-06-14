@@ -1,0 +1,10 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Pollen\Config;
+
+abstract class AbstractConfigLoader implements ConfigLoaderInterface
+{
+    protected $config = [];
+}

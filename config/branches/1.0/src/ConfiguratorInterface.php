@@ -4,16 +4,7 @@ declare(strict_types=1);
 
 namespace Pollen\Config;
 
-use Pollen\Support\Concerns\BootableTraitInterface;
-use Pollen\Support\Concerns\ParamsBagDelegateTraitInterface;
-use Pollen\Support\Proxy\ContainerProxyInterface;
-
-interface ConfiguratorInterface extends BootableTraitInterface, ContainerProxyInterface, ParamsBagDelegateTraitInterface
+interface ConfiguratorInterface
 {
-    /**
-     * Chargement.
-     *
-     * @return void
-     */
-    public function boot(): void;
+
 }
