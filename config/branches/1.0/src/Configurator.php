@@ -12,24 +12,28 @@ use Pollen\Support\Exception\ManagerRuntimeException;
 class Configurator implements ConfiguratorInterface
 {
     /**
+     * Configurator main instance.
      * @var static|null
      */
-    private static $instance;
+    private static ?ConfiguratorInterface $instance = null;
 
     /**
+     * Config DataBag instance.
      * @var Data
      */
-    protected $config;
+    protected Data $config;
 
     /**
+     * Strict configuration manager instance.
      * @var Configuration
      */
-    protected $strictConfig;
+    protected Configuration $strictConfig;
 
     /**
+     * List of strict configuration parameters keys.
      * @var string[]
      */
-    protected $strictConfigKeys = [];
+    protected array $strictConfigKeys = [];
 
     /**
      * @param array $config
@@ -47,7 +51,9 @@ class Configurator implements ConfiguratorInterface
     }
 
     /**
-     * @inheritDoc
+     * @param ConfigLoaderInterface $loader
+     *
+     * @return array
      */
     public static function fetchFromLoader(ConfigLoaderInterface $loader): array
     {
@@ -55,7 +61,7 @@ class Configurator implements ConfiguratorInterface
     }
 
     /**
-     * Récupération de l'instance principale.
+     * Retrieve main instance.
      *
      * @return static
      */
@@ -119,7 +125,7 @@ class Configurator implements ConfiguratorInterface
 
     public function has(string $key): bool
     {
-        // @todo extraire la partie avant le .
+        // @todo extract part before dot
         if (in_array($key, $this->strictConfigKeys, true)) {
             return $this->strictConfig->exists($key);
         }

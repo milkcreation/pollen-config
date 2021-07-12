@@ -6,5 +6,9 @@ namespace Pollen\Config;
 
 abstract class AbstractConfigLoader implements ConfigLoaderInterface
 {
-    protected $config = [];
+    /**
+     * List of configuration parameters.
+     * @var array
+     */
+    protected array $config = [];
 }

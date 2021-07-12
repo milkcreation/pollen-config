@@ -12,12 +12,12 @@ class FilesystemConfigLoader implements ConfigLoaderInterface
     /**
      * @var string[]
      */
-    protected $extensions = ['json', 'php', 'yml'];
+    protected array $extensions = ['json', 'php', 'yml'];
 
     /**
      * @var string
      */
-    protected $path;
+    protected string $path;
 
     /**
      * @param string $path
