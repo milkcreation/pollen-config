@@ -1,36 +1,30 @@
 {
   "name": "pollen-solutions/config",
-    "description": "Pollen Config Component",
+  "description": "Pollen Solutions - Config Component - Configuration contraint schema, load and dispatch.",
   "homepage": "https://www.presstify.com/pollen-solutions/config/",
   "keywords": [
     "pollen-solutions",
     "component",
     "config"
   ],
-  "time": "2021-06-14",
+  "time": "2021-07-09",
   "license": "MIT",
   "authors": [
     {
       "name": "Jordy Manner",
-      "email": "jordy@presstify.com",
-      "role": "Developper"
-    }
-  ],
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://composer.presstify.com/pollen-solutions/"
+      "email": "jordy@presstify.com"
     }
   ],
   "require": {
-    "php": ">=7.4",
-    "composer/installers": "~1.0",
+    "php": "^7.4 || ^8.0",
+    "ext-json": "*",
     "league/config": "^1.0",
     "pollen-solutions/support": "^1.0",
-    "symfony/yaml": "^5.2"
+    "symfony/yaml": "^5.3"
   },
   "require-dev": {
-    "phpunit/phpunit": "^9.0"
+    "phpunit/phpunit": "^9.0",
+    "roave/security-advisories": "dev-latest"
   },
   "autoload": {
     "psr-4": {

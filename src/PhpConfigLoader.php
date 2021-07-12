@@ -11,12 +11,12 @@ class PhpConfigLoader implements ConfigLoaderInterface
     /**
      * @var string
      */
-    protected $key;
+    protected string $key;
 
     /**
      * @var SplFileInfo
      */
-    protected $finfo;
+    protected SplFileInfo $finfo;
 
     /**
      * @param string $key
