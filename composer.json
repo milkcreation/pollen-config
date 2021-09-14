@@ -1,13 +1,13 @@
 {
   "name": "pollen-solutions/config",
   "description": "Pollen Solutions - Config Component - Configuration contraint schema, load and dispatch.",
-  "homepage": "https://www.presstify.com/pollen-solutions/config/",
+  "homepage": "https://github.com/milkcreation/pollen-config.git",
   "keywords": [
     "pollen-solutions",
     "component",
     "config"
   ],
-  "time": "2021-07-09",
+  "time": "2021-09-14",
   "license": "MIT",
   "authors": [
     {
